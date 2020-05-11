@@ -1,5 +1,3 @@
-//AlphaVantageData.js
-
 (function () {
    
     $(document).ready(function () {
