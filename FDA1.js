@@ -41,7 +41,7 @@
         console.log(drugs[i].openfda?.route);
         console.log(drugs[i].openfda?.manufacturer_name);
         
-        tableData.push({
+	tableData.push({
         "StartDate": drugs[i].drugstartdate,
         "generic_name": drugs[i].openfda?.generic_name[0],
         "brand_name":  drugs[i].openfda?.brand_name[0],
@@ -54,7 +54,7 @@
     });
             table.appendRows(tableData);
             doneCallback();
-        });
+        };
 
     tableau.registerConnector(myConnector);
 
