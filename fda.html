@@ -21,73 +21,87 @@
 </body>
 <script>
 startup();
-function startup () {
-    // Create the connector object
-    var myConnector = tableau.makeConnector();
+(function () {
+   
+    $(document).ready(function () {
+         var myConnector = tableau.makeConnector();
 
-    // Define the schema
-    myConnector.getSchema = function(schemaCallback) {
-        var cols = [	
-		//{id: "id", dataType: tableau.dataTypeEnum.string}, 
-		    	{id: "Open", dataType: tableau.dataTypeEnum.string}, 
-		//	{id: "generic_name",dataType: tableau.dataTypeEnum.string}, 
-		//	{id: "brand_name", dataType: tableau.dataTypeEnum.string}, 
-		//	{id: "product_type", dataType: tableau.dataTypeEnum.string},
-		//	{id: "route", dataType: tableau.dataTypeEnum.string},
-		//	{id: "manufacturer_name", dataType: tableau.dataTypeEnum.string}
-		];
-
+    myConnector.getSchema = function (schemaCallback) {
+        var cols = [{
+            id: "open",
+            alias: "Open",
+            dataType: tableau.dataTypeEnum.string
+        }, {
+            id: "high",
+            alias: "High",
+            dataType: tableau.dataTypeEnum.string
+        }, {
+            id: "date",
+            alias: "Date",
+            dataType: tableau.dataTypeEnum.string
+        }, {
+            id: "low",
+            alias: "Low",
+            dataType: tableau.dataTypeEnum.string
+        }, {
+            id: "close",
+            alias: "Close",
+            dataType: tableau.dataTypeEnum.string
+        }, {
+            id: "volume",
+            alias: "Volume",
+            dataType: tableau.dataTypeEnum.string
+        }];
+    
         var tableSchema = {
-            id: "FDAFeed",
-            alias: "FDA Events Data",
+            id: "timeSeriesDaily",
+            alias: "Stock Datas",
             columns: cols
         };
-
+    
         schemaCallback([tableSchema]);
     };
 
-    // Download the data
-    myConnector.getData = function(table, doneCallback) {
-    tableData = [];
-	    console.log("all drugs");
-    $.ajax({
-          dataType: "json",
-          url: 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=QYOWP5SXIHB6BV3X',
-	    //url: "https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0",
-          data: {},
-       success: function(data){
-       //var drugs = data.results[0]['patient'].patientweight;
-	   const timeSeries = data['Time Series (Daily)']
-            const keys = Object.keys(timeSeries)
-       for (var i = 0 ; i < keys.length ; i++) {
-	        const key = keys[i]
-                 const actual = timeSeries[key]
-                 const expected = {}
-	tableData.push({
-        //"StartDate": data.results[0]['patient'].patientweight,
-	expected.open = actual['1. open'] ? actual['1. open'] : '--'
-        //"generic_name": drugs[i].openfda.generic_name[0],
-        //"brand_name":  drugs[i].openfda.brand_name[0],
-        //"product_type": drugs[i].openfda.product_type[0],
-        //"route": drugs[i].openfda.route[0],
-        //"manufacturer_name": drugs[i].openfda.manufacturer_name[0]
+    myConnector.getData = function (table, doneCallback) {
+        
+        const url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+tableau.connectionData+'&apikey=QYOWP5SXIHB6BV3X'
+        //const url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=QYOWP5SXIHB6BV3X'
+        $.ajax({
+            dataType: "json",
+            url: url,
+            data: {},
+            success: function(data) {
+                const allRows = []
+                const timeSeries = data['Time Series (Daily)']
+                const keys = Object.keys(timeSeries)
+                for (var i = 0 ; i < keys.length ; i++) {
+                    const key = keys[i]
+                    const actual = timeSeries[key]
+                    const expected = {}
+                    expected.open = actual['1. open'] ? actual['1. open'] : '--'
+                    expected.high = actual['2. high'] ? actual['2. high'] : '--'
+                    expected.low = actual['3. low'] ? actual['3. low'] : '--'
+                    expected.close = actual['4. close'] ? actual['4. close'] : '--'
+                    expected.volume = actual['5. volume'] ? actual['5. volume'] : '--'
+                    expected.date = key 
+                    allRows.push(expected)
+                    }
+                    
+                table.appendRows(allRows)
+                doneCallback();
+            }
         });
-        }
-      }
-    });
-            table.appendRows(tableData);
-            doneCallback();
-        };
+    };
 
     tableau.registerConnector(myConnector);
 
-    // Create event listeners for when the user submits the form
-    $(document).ready(function() {
-        $("#submitButton").click(function() {
-            tableau.connectionName = "FDA Events Feed"; // This will be the data source name in Tableau
-            tableau.submit(); // This sends the connector object to Tableau
+        $("#submitButton").click(function () {
+            tableau.connectionData = $("#submitSymbol").val();
+  
+            tableau.connectionName = "AV'+tableau.connectionData+'Feed";
+            tableau.submit();
         });
     });
-};
+})();
 </script>
 </html>
