@@ -1,113 +1,95 @@
 <html>
 <head>
-    <title>Alpha Vantage Data</title>
+    <title>FDA Feed</title>
     <meta http-equiv="Cache-Control" content="no-store" />
-
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
-
-    <script src="https://connectors.tableau.com/libs/tableauwdc-2.3.latest.js" type="text/javascript"></script>
-    <script src="AlphaVantageData.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    
+    <script src="https://connectors.tableau.com/libs/tableauwdc-2.1.1.js" type="text/javascript"></script>
+    <script src="FDA1.js" type="text/javascript"></script>
 </head>
 
 <body>
     <div class="container container-table">
         <div class="row vertical-center-row">
             <div class="text-center col-md-4 col-md-offset-4">
-                <label>Enter Stock Symbol</label>
-                <input type="text" id="submitSymbol" class="" >
-            </div>
-        </div>
-        <div class="row vertical-center-row">
-            <div class="text-center col-md-4 col-md-offset-4">
-                <button type="button" id="submitButton" class="btn btn-success" style="margin: 10px;">Get Stock Data</button>
+                <button type = "button" id = "submitButton" class = "btn btn-success" style = "margin: 10px;">Get FDA Data!</button>
             </div>
         </div>
     </div>
 </body>
 <script>
-(function () {
-   
-    $(document).ready(function () {
-         var myConnector = tableau.makeConnector();
+startup();
+function startup () {
+    // Create the connector object
+    var myConnector = tableau.makeConnector();
 
-    myConnector.getSchema = function (schemaCallback) {
-        var cols = [{
-            id: "open",
-            alias: "Open",
-            dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "high",
-            alias: "High",
-            dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "date",
-            alias: "Date",
-            dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "low",
-            alias: "Low",
-            dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "close",
-            alias: "Close",
-            dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "volume",
-            alias: "Volume",
-            dataType: tableau.dataTypeEnum.string
-        }];
-    
+    // Define the schema
+    myConnector.getSchema = function(schemaCallback) {
+        var cols = [	
+		//{id: "id", dataType: tableau.dataTypeEnum.string}, 
+		    	{id: "StartDate", dataType: tableau.dataTypeEnum.string}, 
+			{id: "generic_name",dataType: tableau.dataTypeEnum.string}, 
+			{id: "brand_name", dataType: tableau.dataTypeEnum.string}, 
+			{id: "product_type", dataType: tableau.dataTypeEnum.string},
+			{id: "route", dataType: tableau.dataTypeEnum.string},
+			{id: "manufacturer_name", dataType: tableau.dataTypeEnum.string}
+		];
+
         var tableSchema = {
-            id: "timeSeriesDaily",
-            alias: "Stock Datas",
+            id: "FDAFeed",
+            alias: "FDA Events Data",
             columns: cols
         };
-    
+
         schemaCallback([tableSchema]);
     };
 
-    myConnector.getData = function (table, doneCallback) {
+    // Download the data
+    myConnector.getData = function(table, doneCallback) {
+    tableData = [];
+    $.ajax({
+          dataType: "json",
+          url: "https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0",
+          data: {},
+       success: function(data){
+       var drugs = data.results[0].patient.drug;
+       console.log("all drugs"+drugs);
+       for (var i=0; i<drugs.length; i++) {
+        console.log(drugs[i].drugstartdate);
+        //console.log(drugs[i].openfda?.brand_name);
+        console.log(drugs[i].openfda?.generic_name);
+        console.log(drugs[i].openfda?.product_type);
+        console.log(drugs[i].openfda?.route);
+        console.log(drugs[i].openfda?.manufacturer_name);
         
-        const url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+tableau.connectionData+'&apikey=QYOWP5SXIHB6BV3X'
-        //const url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=QYOWP5SXIHB6BV3X'
-        $.ajax({
-            dataType: "json",
-            url: url,
-            data: {},
-            success: function(data) {
-                const allRows = []
-                const timeSeries = data['Time Series (Daily)']
-                const keys = Object.keys(timeSeries)
-                for (var i = 0 ; i < keys.length ; i++) {
-                    const key = keys[i]
-                    const actual = timeSeries[key]
-                    const expected = {}
-                    expected.open = actual['1. open'] ? actual['1. open'] : '--'
-                    expected.high = actual['2. high'] ? actual['2. high'] : '--'
-                    expected.low = actual['3. low'] ? actual['3. low'] : '--'
-                    expected.close = actual['4. close'] ? actual['4. close'] : '--'
-                    expected.volume = actual['5. volume'] ? actual['5. volume'] : '--'
-                    expected.date = key 
-                    allRows.push(expected)
-                    }
-                    
-                table.appendRows(allRows)
-                doneCallback();
-            }
+	tableData.push({
+        "StartDate": drugs[i].drugstartdate,
+        "generic_name": drugs[i].openfda?.generic_name[0],
+        "brand_name":  drugs[i].openfda?.brand_name[0],
+        "product_type": drugs[i].openfda?.product_type[0],
+        "route": drugs[i].openfda?.route[0],
+        "manufacturer_name": drugs[i].openfda?.manufacturer_name[0]
         });
-    };
+        }
+      }
+    });
+            table.appendRows(tableData);
+            doneCallback();
+        };
 
     tableau.registerConnector(myConnector);
 
-        $("#submitButton").click(function () {
-            tableau.connectionData = $("#submitSymbol").val();
-  
-            tableau.connectionName = "AV'+tableau.connectionData+'Feed";
-            tableau.submit();
+    // Create event listeners for when the user submits the form
+    $(document).ready(function() {
+        $("#submitButton").click(function() {
+            tableau.connectionName = "FDA Events Feed"; // This will be the data source name in Tableau
+            tableau.submit(); // This sends the connector object to Tableau
         });
     });
-})();
+};
+
 </script>
 </html>
