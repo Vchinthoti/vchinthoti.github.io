@@ -31,7 +31,7 @@
 		console.log(resp.features);
 		
             var feat = resp.features;
-		console.log(feat.length);
+		console.log(feat.length());
                 tableData = [];
 
             // Iterate over the JSON object
