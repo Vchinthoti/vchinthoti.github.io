@@ -4,7 +4,8 @@
 
     // Define the schema
     myConnector.getSchema = function(schemaCallback) {
-        var cols = [	{id: "id", dataType: tableau.dataTypeEnum.string}, 
+        var cols = [	
+		//{id: "id", dataType: tableau.dataTypeEnum.string}, 
 		    	{id: "StartDate", dataType: tableau.dataTypeEnum.string}, 
 			{id: "generic_name",dataType: tableau.dataTypeEnum.string}, 
 			{id: "brand_name", dataType: tableau.dataTypeEnum.string}, 
@@ -33,13 +34,13 @@
             // Iterate over the JSON object
             for (var i = 0, len = feat.length; i < len; i++) {
                 tableData.push({
-                    "id": feat[i].id,
+                   // "id": feat[i].id,
                     "StartDate": feat[i].results.drug.drugstartdate,
                     "generic_name": feat[i].results.drug.generic_name,
                     "brand_name": feat[i].results.drug.brand_name,
                     "product_type": feat[i].results.drug.product_type,
-		                "route": feat[i].results.drug.route,
-		                "manufacturer_name": feat[i].results.drug.manufacturer_name
+		    "route": feat[i].results.drug.route,
+		    "manufacturer_name": feat[i].results.drug.manufacturer_name
                 });
             }
 
@@ -53,7 +54,7 @@
     // Create event listeners for when the user submits the form
     $(document).ready(function() {
         $("#submitButton").click(function() {
-            tableau.connectionName = "FDA Event Feed"; // This will be the data source name in Tableau
+            tableau.connectionName = "FDA Events Feed"; // This will be the data source name in Tableau
             tableau.submit(); // This sends the connector object to Tableau
         });
     });
