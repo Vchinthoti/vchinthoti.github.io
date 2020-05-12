@@ -28,11 +28,14 @@
         $.getJSON("https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0", function(resp)
 		//$.getJSON("http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson", function(resp) 
 		{
+		console.log(resp.features);
+		
             var feat = resp.features,
+		console.log(feat.length);
                 tableData = [];
 
             // Iterate over the JSON object
-            for (var i = 0, len = feat.length; i < len; i++) {
+            for (var i = 0, var len = feat.length; i < len; i++) {
                 tableData.push({
                    // "id": feat[i].id,
                     "StartDate": feat[i].results.drug.drugstartdate,
