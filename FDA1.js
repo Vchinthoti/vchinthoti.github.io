@@ -35,7 +35,7 @@
        console.log("all drugs"+drugs);
        for (var i=0; i<drugs.length; i++) {
         console.log(drugs[i].drugstartdate);
-        console.log(drugs[i].openfda?.brand_name);
+        //console.log(drugs[i].openfda?.brand_name);
         console.log(drugs[i].openfda?.generic_name);
         console.log(drugs[i].openfda?.product_type);
         console.log(drugs[i].openfda?.route);
