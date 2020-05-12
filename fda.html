@@ -29,7 +29,7 @@ function startup () {
     myConnector.getSchema = function(schemaCallback) {
         var cols = [	
 		//{id: "id", dataType: tableau.dataTypeEnum.string}, 
-		    	{id: "StartDate", dataType: tableau.dataTypeEnum.string}, 
+		    	{id: "Open", dataType: tableau.dataTypeEnum.string}, 
 		//	{id: "generic_name",dataType: tableau.dataTypeEnum.string}, 
 		//	{id: "brand_name", dataType: tableau.dataTypeEnum.string}, 
 		//	{id: "product_type", dataType: tableau.dataTypeEnum.string},
@@ -52,21 +52,27 @@ function startup () {
 	    console.log("all drugs");
     $.ajax({
           dataType: "json",
-          url: "https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0",
+          url: 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=QYOWP5SXIHB6BV3X'
+	    //url: "https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0",
           data: {},
        success: function(data){
-       var drugs = data.results[0]['patient'].patientweight;
-       console.log("all drugs"+drugs);
-       //for (var i=0; i<drugs.length; i++) {
+       //var drugs = data.results[0]['patient'].patientweight;
+	   const timeSeries = data['Time Series (Daily)']
+            const keys = Object.keys(timeSeries)
+       for (var i = 0 ; i < keys.length ; i++) {
+	        const key = keys[i]
+                 const actual = timeSeries[key]
+                 const expected = {}
 	tableData.push({
-        "StartDate": data.results[0]['patient'].patientweight,
+        //"StartDate": data.results[0]['patient'].patientweight,
+	expected.open = actual['1. open'] ? actual['1. open'] : '--'
         //"generic_name": drugs[i].openfda.generic_name[0],
         //"brand_name":  drugs[i].openfda.brand_name[0],
         //"product_type": drugs[i].openfda.product_type[0],
         //"route": drugs[i].openfda.route[0],
         //"manufacturer_name": drugs[i].openfda.manufacturer_name[0]
         });
-       // }
+        }
       }
     });
             table.appendRows(tableData);
@@ -83,8 +89,5 @@ function startup () {
         });
     });
 };
-
 </script>
-
 </html>
-
