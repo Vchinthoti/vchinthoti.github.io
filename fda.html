@@ -52,10 +52,10 @@ function startup () {
 	    console.log("all drugs");
     $.ajax({
           dataType: "json",
-          url: "https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0",
+          url: "https://api.fda.gov/drug/event.json",
           data: {},
        success: function(data){
-       var drugs = data.results[0].patient.drug;
+       var drugs = data.results[0].drug;
        console.log("all drugs"+drugs);
        for (var i=0; i<drugs.length; i++) {
         //console.log(drugs[i].drugstartdate);
