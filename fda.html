@@ -52,7 +52,7 @@ function startup () {
 	    console.log("all drugs");
     $.ajax({
           dataType: "json",
-          url: 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=QYOWP5SXIHB6BV3X'
+          url: 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=QYOWP5SXIHB6BV3X',
 	    //url: "https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0",
           data: {},
        success: function(data){
