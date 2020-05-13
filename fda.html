@@ -51,19 +51,18 @@ function startup () {
         myConnector.getData = function(table, doneCallback) {
             tableData = [];
 
-            tableData = [];
             const url = 'https://api.fda.gov/drug/event.json'
-            $.ajax({
-                  dataType: "json",
-                  url: url
-            }).done(function(){
+          //  $.ajax({
+               //   dataType: "json",
+               //   url: url
+            //}).done(function(){
 
 
                tableData.push({
                 "StartDate": '03/15/2020'
                 });
 
-            });
+            //});
 
             table.appendRows(tableData);
             doneCallback();
