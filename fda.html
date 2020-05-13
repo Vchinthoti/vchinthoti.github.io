@@ -63,11 +63,11 @@ function startup () {
 	for (var i=0; i<drugs.length; i++) {
               tableData.push({
 		"StartDate": drugs[i].drugstartdate,
-		"generic_name": drugs[i].openfda ? drugs[i].openfda.generic_name[0] : '',
-		"brand_name":  drugs[i].openfda ? drugs[i].openfda.brand_name[0] : '',
-		"product_type": drugs[i].openfda ? drugs[i].openfda.product_type[0] : '',
-		"route": drugs[i].openfda ? drugs[i].openfda.route[0] : 'any route',
-		"manufacturer_name": drugs[i].openfda ? drugs[i].openfda.manufacturer_name[0] : ''
+		"generic_name": drugs[i].openfda ? drugs[i].openfda.generic_name[0] : Null,
+		"brand_name":  drugs[i].openfda ? drugs[i].openfda.brand_name[0] : Null,
+		"product_type": drugs[i].openfda ? drugs[i].openfda.product_type[0] : Null,
+		"route": drugs[i].openfda ? drugs[i].openfda.route[0] : Null,
+		"manufacturer_name": drugs[i].openfda ? drugs[i].openfda.manufacturer_name[0] : Null
             });
 	}
             
