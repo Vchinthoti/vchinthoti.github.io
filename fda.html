@@ -47,7 +47,7 @@ function startup () {
 
     // Download the data
     myConnector.getData = function(table, doneCallback) {
-    //tableData = [];
+    tableData = [];
     const url = 'https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0'
     $.ajax({
           dataType: "json",
