@@ -55,14 +55,14 @@ function startup () {
             const url = 'https://api.fda.gov/drug/event.json'
             $.ajax({
                   dataType: "json",
-                  url: url,
-                  data: {},
-               success: function(data){
+                  url: url
+            }).done(function(){
+
+
                tableData.push({
-                "StartDate": '05/13/2020'
+                "StartDate": '03/15/2020'
                 });
 
-              }
             });
 
             table.appendRows(tableData);
