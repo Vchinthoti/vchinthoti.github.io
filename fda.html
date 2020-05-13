@@ -51,21 +51,24 @@ function startup () {
         myConnector.getData = function(table, doneCallback) {
             tableData = [];
 
-            const url = 'https://api.fda.gov/drug/event.json'
-          //  $.ajax({
-               //   dataType: "json",
-               //   url: url
-            //}).done(function(){
-
+            //const url = 'https://api.fda.gov/drug/event.json'
+          const url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=QYOWP5SXIHB6BV3X'
+        $.ajax({
+            dataType: "json",
+            url: url,
+            data: {},
+            success: function(data) {
 
                tableData.push({
                 "StartDate": '03/15/2020'
                 });
 
-            //});
+            
 
             table.appendRows(tableData);
             doneCallback();
+	    }
+	});
         }
 
     tableau.registerConnector(myConnector);
