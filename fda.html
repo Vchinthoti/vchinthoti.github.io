@@ -50,6 +50,7 @@ function startup () {
 
         myConnector.getData = function(table, doneCallback) {
             tableData = [];
+		
 
             //const url = 'https://api.fda.gov/drug/event.json'
           const url = 'https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0'
@@ -58,6 +59,7 @@ function startup () {
             url: url,
             data: {},
             success: function(data) {
+		var drugs = data.results[0].patient.drug;
 	for (var i=0; i<drugs.length; i++) {
               tableData.push({
 		"StartDate": drugs[i].drugstartdate,
