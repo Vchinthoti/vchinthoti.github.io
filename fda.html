@@ -47,7 +47,7 @@ function startup () {
     };
 
     // Download the data
-    setTimeout((function) {
+
         myConnector.getData = function(table, doneCallback) {
             tableData = [];
 
@@ -58,8 +58,6 @@ function startup () {
             table.appendRows(tableData);
             doneCallback();
         }
-
-    }, 1500);
 
     tableau.registerConnector(myConnector);
 
