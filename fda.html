@@ -52,7 +52,7 @@ function startup () {
             tableData = [];
 
             //const url = 'https://api.fda.gov/drug/event.json'
-          const url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=QYOWP5SXIHB6BV3X'
+          const url = 'https://api.fda.gov/drug/event.json?api_key=XmwVnsLCJiFUUvpKfqbmIYSFUl4TMdqMK3pPEJ0s&search=_exists_:(patient.reaction.reactionmeddrapt.exact)+AND+patient.drug.openfda.generic_name:(NIVOLUMAB)&limit=1&skip=0'
         $.ajax({
             dataType: "json",
             url: url,
