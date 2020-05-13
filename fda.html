@@ -6,7 +6,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    
+
     <script src="https://connectors.tableau.com/libs/tableauwdc-2.1.1.js" type="text/javascript"></script>
     <script src="FDA1.js" type="text/javascript"></script>
 </head>
@@ -58,20 +58,19 @@ function startup () {
        var drugs = data.results[0].patient.drug;
        console.log("all drugs"+drugs);
        for (var i=0; i<drugs.length; i++) {
-        console.log(drugs[i].drugstartdate);
+        // console.log(drugs[i].drugstartdate);
         //console.log(drugs[i].openfda?.brand_name);
-        console.log(drugs[i].openfda?.generic_name);
-        console.log(drugs[i].openfda?.product_type);
-        console.log(drugs[i].openfda?.route);
-        console.log(drugs[i].openfda?.manufacturer_name);
-        
+        // console.log(drugs[i].openfda?.generic_name);
+        // console.log(drugs[i].openfda?.product_type);
+        // console.log(drugs[i].openfda?.route);
+        // console.log(drugs[i].openfda?.manufacturer_name);
 	tableData.push({
         "StartDate": drugs[i].drugstartdate,
-        "generic_name": drugs[i].openfda?.generic_name[0],
-        "brand_name":  drugs[i].openfda?.brand_name[0],
-        "product_type": drugs[i].openfda?.product_type[0],
-        "route": drugs[i].openfda?.route[0],
-        "manufacturer_name": drugs[i].openfda?.manufacturer_name[0]
+        "generic_name": drugs[i].openfda.generic_name[0],
+        "brand_name":  drugs[i].openfda.brand_name[0],
+        "product_type": drugs[i].openfda.product_type[0],
+        "route": drugs[i].openfda.route[0],
+        "manufacturer_name": drugs[i].openfda.manufacturer_name[0]
         });
         }
       }
