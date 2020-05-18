@@ -37,7 +37,8 @@ function startup () {
 			{id: "product_type", dataType: tableau.dataTypeEnum.string},
 			{id: "route", dataType: tableau.dataTypeEnum.string},
 			{id: "manufacturer_name", dataType: tableau.dataTypeEnum.string},
-           		 {id: "product_ndc", dataType: tableau.dataTypeEnum.string}
+           		 {id: "product_ndc", dataType: tableau.dataTypeEnum.string},
+			{id: "package_ndc", dataType: tableau.dataTypeEnum.string}
 		];
         var tableSchema = {
             id: "FDAFeed",
@@ -71,6 +72,7 @@ function startup () {
 		"route": drugs[i].openfda ? drugs[i].openfda.route[0] : null,
 		"manufacturer_name": drugs[i].openfda ? drugs[i].openfda.manufacturer_name[0] : null,
          	"product_ndc": drugs[i].openfda ? drugs[i].openfda.product_ndc[0] : null
+		"package_ndc": drugs[i].openfda ? drugs[i].openfda.package_ndc[0] : null
             });
 	}
             
