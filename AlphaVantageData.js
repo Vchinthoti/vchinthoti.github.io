@@ -66,7 +66,7 @@
                         expected.low = actual['3. low'] ? actual['3. low'] : '--'
                         expected.close = actual['4. close'] ? actual['4. close'] : '--'
                         expected.volume = actual['5. volume'] ? actual['5. volume'] : '--'
-                        expected.volume = actual['5. volume'] ?  tableau.connectionData[i] : '--'
+                        expected.volume = actual['6. symbol'] ?  tableau.connectionData[i] : '--'
                         expected.date = key 
                         allRows.push(expected)
                         }
